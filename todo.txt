@@ -1,0 +1,7 @@
+- Customize menu {buttons with/without text}
+- Mobile buttons position and slideble menu
+- Create buttons function {
+    - create a <button> set filterButton and purpleGradient classes
+    - create an <img> set filterIcon class and src property
+- Change HTML for JS code
+}
