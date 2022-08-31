@@ -35,5 +35,6 @@ const footer = () => {
   footer.setAttribute("class", "footer purpleBackgound");
   body.appendChild(footer);
 }
+//comment
 setNavbarButtons(createButtonArguments);
 footer();
