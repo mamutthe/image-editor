@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 :root {
   --white: hsl(45, 29%, 97%);
   --bluishblack: hsl(221, 39%, 11%);
@@ -166,3 +167,120 @@
   border: none;
   background: transparent;
 }
+=======
+:root {
+  --white: hsl(45, 29%, 97%);
+  --bluishblack: hsl(221, 39%, 11%);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 97vh;
+  background-color: var(--white);
+  border-radius: 25px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px 10px;
+}
+
+.mainHeader {
+  display: flex;
+  align-items: center;
+  height: 15%;
+  margin-top: 1%;
+  margin-bottom: 2%;
+}
+
+.mainTitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 900;
+  font-size: 4.5rem;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.workspace {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.currentImageContainer {
+  order: 1;
+  height: 100%;
+  width: 38%;
+  overflow: hidden;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+  border-radius: 5%;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 30px -12px;
+}
+
+.currentImage {
+  height: 100%;
+  width: 100%;
+}
+
+.leftNavbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  order: 0;
+}
+
+.rightNavbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  order: 2;
+}
+
+.footer {
+  margin-top: auto;
+  width: 100%;
+  height: 4vw;
+  background-color: var(--bluishblack);
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1%;
+  height: 5.5vw;
+  width: 5.5vw;
+  border: none;
+  border-radius: 25%;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 30px -15px;
+  transition: 0.1s;
+}
+
+.filterButton:hover {
+}
+
+.buttonIcon {
+  height: 90%;
+  width: 90%;
+  filter: invert(8%) sepia(19%) saturate(1583%) hue-rotate(182deg)
+    brightness(96%) contrast(96%);
+}
+>>>>>>> 8fc17b0694850d2155e9bce9d697b83282f9d82c
