@@ -1,5 +1,6 @@
 :root {
   --white: hsl(45, 29%, 97%);
+  --bluishblack: hsl(221, 39%, 11%);
 }
 
 .body {
@@ -8,28 +9,40 @@
   align-items: center;
   justify-content: center;
   height: 97vh;
-  background-color: hsl(45, 29%, 97%);
-  border-radius: 3%;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 30px -15px;
-  overflow: hidden;
+  background-color: var(--white);
+  border-radius: 25px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px 10px;
 }
 
 .mainHeader {
   display: flex;
   align-items: center;
-  /*border-style: solid;*/
-  /*border-color: rgb(161, 201, 18);*/
   height: 15%;
-  margin-bottom: 3%;
+  margin-top: 1%;
+  margin-bottom: 2%;
 }
 
 .mainTitle {
   font-family: "Inter", sans-serif;
   font-weight: 900;
   font-size: 4.5rem;
-  color: rgba(17, 24, 39);
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
 }
-
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 .workspace {
   display: flex;
   flex-direction: row;
@@ -38,8 +51,6 @@
 }
 
 .currentImageContainer {
-  /*border-style: solid;
-  border-color: cornflowerblue; */
   order: 1;
   height: 100%;
   width: 38%;
@@ -74,43 +85,31 @@
 .footer {
   margin-top: auto;
   width: 100%;
-  height: 6vw;
-  background-color: purple;
-  overflow: hidden;
+  height: 4vw;
+  background-color: var(--bluishblack);
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
 }
 
 .filterButton {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 1%;
   height: 5.5vw;
   width: 5.5vw;
   border: none;
   border-radius: 25%;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 30px -15px;
-  margin-bottom: 1%;
-  color: rgb(255, 0, 0);
+  transition: 0.1s;
 }
 
 .filterButton:hover {
-  border-style: solid;
-  border-width: thin;
-  border-color: var(--white);
-  cursor: pointer;
 }
 
 .buttonIcon {
   height: 90%;
   width: 90%;
-  filter: invert(100%) sepia(0%) saturate(6647%) hue-rotate(172deg)
-    brightness(114%) contrast(99%);
-}
-
-.purpleGradient {
-  background: linear-gradient(
-    360deg,
-    rgba(55, 0, 87, 1) 0%,
-    rgba(82, 0, 140, 1) 33%,
-    rgba(192, 0, 255, 1) 100%
-  );
+  filter: invert(8%) sepia(19%) saturate(1583%) hue-rotate(182deg)
+    brightness(96%) contrast(96%);
 }
