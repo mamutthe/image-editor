@@ -1,9 +1,23 @@
-let createButtonArguments = ["Brightness","brightness.svg","leftNavbar",
-                             "Contrast","contrast.svg","leftNavbar",
-                             "Sharpness","sharpness.svg","leftNavbar",
-                             "Temperature","temperature.svg","rightNavbar",
-                             "Color","color.svg","rightNavbar",
-                             "Information","information.svg","rightNavbar"];
+let createButtonArguments = [
+  "Brightness",
+  "brightness.svg",
+  "leftNavbar",
+  "Contrast",
+  "contrast.svg",
+  "leftNavbar",
+  "Sharpness",
+  "sharpness.svg",
+  "leftNavbar",
+  "Temperature",
+  "temperature.svg",
+  "rightNavbar",
+  "Color",
+  "color.svg",
+  "rightNavbar",
+  "Information",
+  "information.svg",
+  "rightNavbar",
+];
 
 const createNavbarButton = (name, svgIcon, navbarPosition, jsCode) => {
   let filterButton = document.createElement("button");
@@ -20,7 +34,7 @@ const createNavbarButton = (name, svgIcon, navbarPosition, jsCode) => {
 };
 
 const setNavbarButtons = (createButtonArguments) => {
-  for (i = 0; i < createButtonArguments.length; i=i+3)  {
+  for (i = 0; i < createButtonArguments.length; i += 3) {
     createNavbarButton(
       createButtonArguments[i],
       createButtonArguments[i + 1],
@@ -30,11 +44,25 @@ const setNavbarButtons = (createButtonArguments) => {
 };
 
 const footer = () => {
-  let footer = document.createElement("footer");
+  let footer = document.createElement("figcaption");
   let body = document.querySelector(".body");
   footer.setAttribute("class", "footer purpleBackgound");
   body.appendChild(footer);
-}
-//comment
+};
+
 setNavbarButtons(createButtonArguments);
 footer();
+
+const range = document.querySelector(".range");
+const style = document.createElement("style");
+document.body.appendChild(style);
+
+range.addEventListener("input", () => {
+  const value = range.value;
+  const valueBar = (100 * value)/range.max;
+  style.textContent = `.range {background: linear-gradient(to right, #1976d2 ${valueBar}%, #a8cbee ${valueBar}%);}`;
+  style.textContent += `.currentImage {filter: brightness(${Math.abs(value > (range.max/1.5) ? value : value / 4)});}`;
+  console.log(value);
+});
+
+
