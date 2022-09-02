@@ -31,6 +31,22 @@ class CreateButton {
   }
 
   /**
+   * Setar HTML da ação do botão.
+   *
+   * @param {*} action - HTML
+   */
+  set buttonAction(action) {
+    this._buttonAction = action;
+  }
+
+  /**
+   * Retornar o HTML da ação do botão.
+   */
+  get buttonAction() {
+    return this._buttonAction;
+  }
+
+  /**
    *  Retornar o elemento da imagem gerada pela função buttonIcon.
    */
   get buttonIcon() {
@@ -61,7 +77,17 @@ class CreateButton {
    * Salvar o HTML do botão no elemento da localização escolhida.
    */
   save() {
-    this.loc.appendChild(this.HTML);
+    const buttonEntry = document.createElement("button-entry");
+
+    if (this._buttonAction !== undefined) {
+      const buttonAction = document.createElement("button-action");
+      buttonAction.appendChild(this.buttonAction);
+      buttonEntry.appendChild(buttonAction);
+    }
+
+    buttonEntry.appendChild(this.HTML);
+
+    this.loc.appendChild(buttonEntry);
   }
 }
 
@@ -78,38 +104,55 @@ class Start {
         name: "Brightness",
         icon: "brightness.svg",
         pos: "leftNavbar",
+        action: () => {
+          const inputRange = document.createElement("input");
+          inputRange.setAttribute("type", "range");
+          inputRange.setAttribute("class", "range");
+          inputRange.setAttribute("min", "0.0");
+          inputRange.setAttribute("max", "8");
+          inputRange.setAttribute("value", "0");
+          inputRange.setAttribute("step", "0.1");
+
+          return inputRange;
+        },
       },
       {
         name: "Contrast",
         icon: "contrast.svg",
         pos: "leftNavbar",
+        action: undefined,
       },
       {
         name: "Sharpness",
         icon: "sharpness.svg",
         pos: "leftNavbar",
+        action: undefined,
       },
       {
         name: "Temperature",
         icon: "temperature.svg",
         pos: "rightNavbar",
+        action: undefined,
       },
       {
         name: "Color",
         icon: "color.svg",
         pos: "rightNavbar",
+        action: undefined,
       },
       {
         name: "Information",
         icon: "information.svg",
         pos: "rightNavbar",
+        action: undefined,
       },
     ];
 
     listButtons.forEach((buttonObj) => {
-      const { name, icon, pos } = buttonObj;
+      const { name, icon, pos, action } = buttonObj;
       const button = new CreateButton(name, pos);
       button.buttonIcon = icon;
+      if (action !== undefined) button.buttonAction = action();
       button.save();
     });
   }
@@ -149,3 +192,10 @@ class Start {
   loadingPage.footer();
   loadingPage.eventRange();
 })();
+
+const obj = {
+  x: 0,
+  set addX(value) {
+    this.x = value + 1;
+  },
+};
