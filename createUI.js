@@ -149,3 +149,10 @@ class Start {
   loadingPage.footer();
   loadingPage.eventRange();
 })();
+
+const obj = {
+  x: 0,
+  set addX(value) {
+    this.x = value + 1;
+  },
+};
