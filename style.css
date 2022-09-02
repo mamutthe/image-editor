@@ -104,9 +104,9 @@
   opacity: 1;
   position: absolute;
   inset: 0;
-  border-radius: 10px;
+  border-radius: 25%;
   padding: 3px;
-  margin-bottom: -2.1px;
+  margin: -2px;
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -169,4 +169,16 @@
   cursor: pointer;
   box-shadow: 0 0 2px 0 #555;
   border: none;
+}
+
+button-entry {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+
+button-action {
+  display: flex;
+  margin: 0 1em;
+  align-items: center;
 }
