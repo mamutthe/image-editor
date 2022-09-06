@@ -1,33 +1,48 @@
 type positionType = 'leftNavbar' | 'rightNavbar';
+type buttonListType = Array<{
+  name: string;
+  icon: string;
+  position: positionType;
+  action: undefined | (() => void);
+}>;
 
-class Button {
+class CreateButton {
   name: string;
   position: positionType;
-  private $imgElement: HTMLImageElement | undefined;
-  private action: unknown;
+  private $imgElement: HTMLImageElement;
+  private action: undefined | (() => void);
 
   constructor(name: string, position: positionType) {
     this.name = name;
     this.position = position;
-    this.$imgElement = undefined;
+    this.$imgElement = document.createElement('img');
     this.action = undefined;
   }
 
-  setIcon(name: `${string}.svg`): void {
-    const $getElementImg = document.createElement('img');
-    $getElementImg.setAttribute('class', 'buttonIcon');
-    $getElementImg.setAttribute('src', `/icons/${name}`);
-    this.$imgElement = $getElementImg;
+  set Icon(icon: any) {
+    const iconFileName: string = icon;
+    const $imgElement = document.createElement('img');
+    $imgElement.setAttribute('class', 'buttonIcon');
+    $imgElement.setAttribute('src', `/icons/${iconFileName}`);
+    this.$imgElement = $imgElement;
   }
 
-  setAction(action: unknown): void {
+  get Icon(): HTMLImageElement {
+    return this.$imgElement;
+  }
+
+  set Action(action: undefined | (() => void)) {
     this.action = action;
+  }
+
+  get Action(): undefined | (() => void) {
+    return this.action;
   }
 
   private get HTML(): HTMLButtonElement {
     const $filterButton = document.createElement('button');
     $filterButton.setAttribute('type', 'button');
-    $filterButton.setAttribute('class', 'filterButton purpleGradient');
+    $filterButton.setAttribute('class', 'filterButton');
     $filterButton.setAttribute('id', this.name);
     $filterButton.setAttribute('title', this.name);
 
@@ -40,23 +55,140 @@ class Button {
 
   create(): void {
     const $buttonEntry = document.createElement('button-entry');
-    const $locationElement = document.querySelector(`.${this.position}`);
+    const $navbarElement = document.querySelector(`.${this.position}`);
 
-    if ($locationElement === null) {
+    if ($navbarElement === null) {
       throw new Error('Location Element is null, what?');
     }
-
+    /*
     if (this.action !== undefined) {
       const $buttonAction = document.createElement('button-action');
       $buttonAction.appendChild(this.action as Node);
       $buttonEntry.appendChild($buttonAction);
-    }
+    } */
 
     $buttonEntry.appendChild(this.HTML);
 
-    $locationElement.appendChild($buttonEntry);
+    $navbarElement.appendChild($buttonEntry);
   }
 }
+
+class StartPage {
+
+  loadButtons():void {
+    const buttonList: buttonListType = [
+      {
+        name: 'Brightness',
+        icon: 'brightness.svg',
+        position: 'leftNavbar',
+        action: () => {
+          const inputRange = document.createElement('input');
+          inputRange.setAttribute('type', 'range');
+          inputRange.setAttribute('class', 'range');
+          inputRange.setAttribute('min', '0.0');
+          inputRange.setAttribute('max', '8');
+          inputRange.setAttribute('value', '0');
+          inputRange.setAttribute('step', '0.1');
+
+          return inputRange;
+        }
+      },
+      {
+        name: 'Contrast',
+        icon: 'contrast.svg',
+        position: 'leftNavbar',
+        action: undefined
+      },
+      {
+        name: 'Sharpness',
+        icon: 'sharpness.svg',
+        position: 'leftNavbar',
+        action: undefined
+      },
+      {
+        name: 'Temperature',
+        icon: 'temperature.svg',
+        position: 'rightNavbar',
+        action: undefined
+      },
+      {
+        name: 'Color',
+        icon: 'color.svg',
+        position: 'rightNavbar',
+        action: undefined
+      },
+      {
+        name: 'Information',
+        icon: 'information.svg',
+        position: 'rightNavbar',
+        action: undefined
+      }
+    ];
+    buttonList.forEach(buttonObj => {
+      const {name, icon, position, action} = buttonObj;
+      buttonObj = new CreateButton (name, position)
+    });
+  }
+}
+  }
+}
+
+
+
+
+/* class Start {
+  loadingButtons(): void {
+    const buttonList: buttonListType = [
+      {
+        name: 'Brightness',
+        icon: 'brightness.svg',
+        pos: 'leftNavbar',
+        action: () => {
+          const inputRange = document.createElement('input');
+          inputRange.setAttribute('type', 'range');
+          inputRange.setAttribute('class', 'range');
+          inputRange.setAttribute('min', '0.0');
+          inputRange.setAttribute('max', '8');
+          inputRange.setAttribute('value', '0');
+          inputRange.setAttribute('step', '0.1');
+
+          return inputRange;
+        }
+      },
+      {
+        name: 'Contrast',
+        icon: 'contrast.svg',
+        pos: 'leftNavbar',
+        action: undefined
+      },
+      {
+        name: 'Sharpness',
+        icon: 'sharpness.svg',
+        pos: 'leftNavbar',
+        action: undefined
+      },
+      {
+        name: 'Temperature',
+        icon: 'temperature.svg',
+        pos: 'rightNavbar',
+        action: undefined
+      },
+      {
+        name: 'Color',
+        icon: 'color.svg',
+        pos: 'rightNavbar',
+        action: undefined
+      },
+      {
+        name: 'Information',
+        icon: 'information.svg',
+        pos: 'rightNavbar',
+        action: undefined
+      }
+    ];
+  }
+}
+ */
 
 /* type posType = 'leftNavbar' | 'rightNavbar';
  type buttonListType = Array<{
