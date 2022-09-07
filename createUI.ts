@@ -7,7 +7,7 @@ type buttonListType = Array<{
 }>;
 
 class CreateButton {
-    name: string;
+  name: string;
   position: positionType;
   private $imgElement: HTMLImageElement;
   private action: undefined | (() => void);
@@ -74,8 +74,7 @@ class CreateButton {
 }
 
 class StartPage {
-
-  loadButtons():void {
+  loadButtons(): void {
     const buttonList: buttonListType = [
       {
         name: 'Brightness',
@@ -124,28 +123,63 @@ class StartPage {
         action: undefined
       }
     ];
-    buttonList.forEach(buttonObj => {
-      const {name, icon, position, action} = buttonObj;
-      const newButton = new CreateButton (name, position)
+    buttonList.forEach((buttonObj) => {
+      const { name, icon, position, action } = buttonObj;
+      const newButton = new CreateButton(name, position);
       newButton.Icon = icon;
       newButton.Action = action;
-      newButton.create()
+      newButton.create();
+    });
+  }
+
+  eventClick(): void {
+    const $workspace = document.querySelector('.workspace');
+    const $body = document.querySelector<HTMLElement>('body');
+
+    ['left', 'right'].forEach((pos) => {
+      const $listButton = document
+        ?.querySelector(`.${pos}Navbar`)
+        ?.querySelectorAll('.filterButton');
+      let checkTimeout = false;
+
+      if ($listButton === undefined || $body === null || $workspace === null) {
+        throw new Error('Error event animate click');
+      }
+
+      $listButton.forEach(($button) =>
+        $button.addEventListener('click', () => {
+          if (checkTimeout) return;
+          const workspaceClass = $workspace.getAttribute('class');
+
+          if (workspaceClass === null) {
+            throw new Error('Error event class animate click');
+          }
+
+          if (workspaceClass.split(' ').indexOf(`workspace-${pos}`) !== -1) {
+            checkTimeout = true;
+            $workspace.setAttribute('class', 'workspace');
+            setTimeout(() => {
+              $body.style.overflow = 'inherit';
+              checkTimeout = false;
+            }, 200);
+          } else {
+            $body.style.overflow = 'hidden';
+            $workspace.setAttribute('class', `workspace-${pos} workspace`);
+          }
+        })
+      );
     });
   }
 }
 
-//Carregar modulos
+// Carregar modulos
 (function () {
-  const loadingPage = new StartPage;
-  loadingPage.loadButtons();
+  const { loadButtons, eventClick } = new StartPage();
+  loadButtons();
+  eventClick();
 })();
 
-
-
-//class SlidableFilterInterface
-
-
-
+// class SlidableFilterInterface
 
 /* class Start {
   loadingButtons(): void {

@@ -98,7 +98,7 @@ class StartPage {
                 action: undefined
             }
         ];
-        buttonList.forEach(buttonObj => {
+        buttonList.forEach((buttonObj) => {
             const { name, icon, position, action } = buttonObj;
             const newButton = new CreateButton(name, position);
             newButton.Icon = icon;
@@ -106,13 +106,46 @@ class StartPage {
             newButton.create();
         });
     }
+    eventClick() {
+        const $workspace = document.querySelector('.workspace');
+        const $body = document.querySelector('body');
+        ['left', 'right'].forEach((pos) => {
+            var _a;
+            const $listButton = (_a = document === null || document === void 0 ? void 0 : document.querySelector(`.${pos}Navbar`)) === null || _a === void 0 ? void 0 : _a.querySelectorAll('.filterButton');
+            let checkTimeout = false;
+            if ($listButton === undefined || $body === null || $workspace === null) {
+                throw new Error('Error event animate click');
+            }
+            $listButton.forEach(($button) => $button.addEventListener('click', () => {
+                if (checkTimeout)
+                    return;
+                const workspaceClass = $workspace.getAttribute('class');
+                if (workspaceClass === null) {
+                    throw new Error('Error event class animate click');
+                }
+                if (workspaceClass.split(' ').indexOf(`workspace-${pos}`) !== -1) {
+                    checkTimeout = true;
+                    $workspace.setAttribute('class', 'workspace');
+                    setTimeout(() => {
+                        $body.style.overflow = 'inherit';
+                        checkTimeout = false;
+                    }, 200);
+                }
+                else {
+                    $body.style.overflow = 'hidden';
+                    $workspace.setAttribute('class', `workspace-${pos} workspace`);
+                }
+            }));
+        });
+    }
 }
-//Carregar modulos
+// Carregar modulos
 (function () {
-    const loadingPage = new StartPage;
-    loadingPage.loadButtons();
+    const { loadButtons, eventClick } = new StartPage();
+    loadButtons();
+    eventClick();
 })();
-//class SlidableFilterInterface
+// class SlidableFilterInterface
 /* class Start {
   loadingButtons(): void {
     const buttonList: buttonListType = [
