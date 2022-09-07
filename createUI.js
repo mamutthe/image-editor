@@ -49,13 +49,70 @@ class CreateButton {
         $navbarElement.appendChild($buttonEntry);
     }
 }
-const teste = new CreateButton('oi', 'leftNavbar');
-teste.Action = () => {
-    alert('helloworld');
-};
-function executeFunction(funcao) {
-    funcao();
+class StartPage {
+    loadButtons() {
+        const buttonList = [
+            {
+                name: 'Brightness',
+                icon: 'brightness.svg',
+                position: 'leftNavbar',
+                action: () => {
+                    const inputRange = document.createElement('input');
+                    inputRange.setAttribute('type', 'range');
+                    inputRange.setAttribute('class', 'range');
+                    inputRange.setAttribute('min', '0.0');
+                    inputRange.setAttribute('max', '8');
+                    inputRange.setAttribute('value', '0');
+                    inputRange.setAttribute('step', '0.1');
+                    return inputRange;
+                }
+            },
+            {
+                name: 'Contrast',
+                icon: 'contrast.svg',
+                position: 'leftNavbar',
+                action: undefined
+            },
+            {
+                name: 'Sharpness',
+                icon: 'sharpness.svg',
+                position: 'leftNavbar',
+                action: undefined
+            },
+            {
+                name: 'Temperature',
+                icon: 'temperature.svg',
+                position: 'rightNavbar',
+                action: undefined
+            },
+            {
+                name: 'Color',
+                icon: 'color.svg',
+                position: 'rightNavbar',
+                action: undefined
+            },
+            {
+                name: 'Information',
+                icon: 'information.svg',
+                position: 'rightNavbar',
+                action: undefined
+            }
+        ];
+        buttonList.forEach(buttonObj => {
+            const { name, icon, position, action } = buttonObj;
+            const newButton = new CreateButton(name, position);
+            newButton.Icon = icon;
+            newButton.Action = action;
+            newButton.create();
+        });
+    }
 }
+//Carregar modulos
+(function () {
+    const loadingPage = new StartPage;
+    loadingPage.loadButtons();
+})();
+//class SlidableFilterInterface
 /* class Start {
   loadingButtons(): void {
     const buttonList: buttonListType = [

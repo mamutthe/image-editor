@@ -7,7 +7,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   height: 97vh;
   background-color: var(--white);
   border-radius: 25px;
@@ -23,9 +22,9 @@
 }
 
 .mainTitle {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 900;
-  font-size: 4.5rem;
+  font-size: 5.5vw;
   color: var(--bluishblack);
 }
 
@@ -95,9 +94,9 @@
 }
 
 .filterButton::before {
-  content: "";
-  opacity: 1;
-  transition: opacity 450ms ease-in-out;
+  content: '';
+  opacity: 0;
+  transition: opacity 350ms ease-in-out;
 }
 
 .filterButton:hover::before {

@@ -7,7 +7,7 @@ type buttonListType = Array<{
 }>;
 
 class CreateButton {
-  name: string;
+    name: string;
   position: positionType;
   private $imgElement: HTMLImageElement;
   private action: undefined | (() => void);
@@ -126,12 +126,23 @@ class StartPage {
     ];
     buttonList.forEach(buttonObj => {
       const {name, icon, position, action} = buttonObj;
-      buttonObj = new CreateButton (name, position)
+      const newButton = new CreateButton (name, position)
+      newButton.Icon = icon;
+      newButton.Action = action;
+      newButton.create()
     });
   }
 }
-  }
-}
+
+//Carregar modulos
+(function () {
+  const loadingPage = new StartPage;
+  loadingPage.loadButtons();
+})();
+
+
+
+//class SlidableFilterInterface
 
 
 
