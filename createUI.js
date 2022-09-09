@@ -139,6 +139,21 @@ class StartPage {
         });
     }
 }
+function onDrag({ movementX, movementY }) {
+    let { left, top } = window.getComputedStyle($window);
+    left = parseInt(left);
+    top = parseInt(top);
+    $window.style.top = (top + movementY).toString() + 'px';
+    $window.style.left = (left + movementX).toString() + 'px';
+    console.log($window.style.top, $window.style.left);
+}
+const $window = document.getElementById('window');
+if ($window != null)
+    $window.addEventListener('mousedown', () => {
+        $window.addEventListener('mousemove', onDrag);
+    });
+else
+    throw new Error('$window is null and not an element');
 // Carregar modulos
 (function () {
     const { loadButtons, eventClick } = new StartPage();
