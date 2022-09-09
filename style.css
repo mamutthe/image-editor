@@ -16,7 +16,7 @@
 }
 
 .body {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 97vh;
@@ -26,12 +26,26 @@
   user-select: none;
 }
 
-.window {
-  background-color: blue;
-  height: 200px;
-  width: 200px;
+.filterWindow {
+  z-index: 9;
   position: absolute;
+  height: 190px;
+  width: 340px;
+  background-color: cyan;
+  border-radius: 25px;
+  overflow: hidden;
 }
+.filterWindow header {
+  display: flex;
+  flex-flow: row;
+  background-color: blue;
+  padding: 6.5px;
+}
+
+.filterWindow .filterWindow.movePointer {
+  cursor: move;
+}
+
 .mainHeader {
   display: flex;
   align-items: center;
