@@ -27,22 +27,79 @@
 }
 
 .filterWindow {
+  display: flex;
+  flex-direction: column;
   z-index: 9;
   position: absolute;
   height: 190px;
   width: 340px;
-  background-color: cyan;
-  border-radius: 25px;
+  border-radius: 10px;
   overflow: hidden;
+  box-shadow: rgba(17, 17, 26, 0.061) 0px 8px 24px,
+    rgba(17, 17, 26, 0.189) 0px 16px 56px, rgba(17, 17, 26, 0.172) 0px 24px 80px;
 }
 .filterWindow header {
+  order: 1;
   display: flex;
   flex-flow: row;
-  background-color: blue;
-  padding: 6.5px;
+  height: 10%;
+  background-color: hsl(0, 4%, 87%);
+  border-top: 1px solid hsl(0, 0%, 90%);
+  border-bottom: 1px solid hsl(0, 0%, 82%);
 }
 
-.filterWindow .filterWindow.movePointer {
+.filterWindow header button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-left: auto;
+  border: none;
+  border-radius: 50%;
+  height: 14px;
+  width: 14px;
+  top: 2px;
+  right: 6px;
+  background-color: #f65d5b;
+}
+
+.filterWindow header button img {
+  width: 7.1px;
+  height: 7.1px;
+  filter: invert(0%) sepia(0%) saturate(5071%) hue-rotate(141deg)
+    brightness(99%) contrast(83%);
+}
+
+.filterWindow:hover header button:hover {
+  background-color: #e53936;
+  cursor: pointer;
+}
+.filterWindow header span {
+  margin-left: auto;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 90%;
+  color: var(--bluishblack);
+}
+
+.filterWindowContent {
+  order: 3;
+  z-index: -1;
+  background-color: var(--white);
+  height: 100%;
+  width: 100%;
+}
+
+.filterWindow footer {
+  order: 5;
+  margin-top: auto;
+  padding: 4.5px;
+  background-color: hsla(0, 3%, 83%, 0.459);
+  backdrop-filter: saturate(200%) blur(20px);
+  color: #757575;
+}
+
+.filterWindowMovePointer {
   cursor: move;
 }
 

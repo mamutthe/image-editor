@@ -149,8 +149,8 @@ function onDrag({ movementX, movementY }) {
 }
 /* if ($window != null) { */
 $window.addEventListener('mousedown', () => {
-    $window.classList.add('movePointer');
-    $window.addEventListener('mousemove', onDrag);
+    $window.classList.add('filterWindowMovePointer');
+    document.addEventListener('mousemove', onDrag);
 });
 /* } else throw new Error('$window is null and not an element'); */
 // Carregar modulos
@@ -160,8 +160,8 @@ $window.addEventListener('mousedown', () => {
     eventClick();
 })();
 document.addEventListener('mouseup', () => {
-    $window.classList.remove('movePointer');
-    $window.removeEventListener('mousemove', onDrag);
+    $window.classList.remove('filterWindowMovePointer');
+    document.removeEventListener('mousemove', onDrag);
 });
 // class SlidableFilterInterface
 /* class Start {
