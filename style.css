@@ -20,7 +20,9 @@
   display: flex;
   flex-direction: column;
   height: 97vh;
-  background-color: var(--white);
+  background: -webkit-linear-gradient(bottom right, #7e8dd8, #a0d0ef);
+  background: -moz-linear-gradient(bottom right, #7e8dd8, #a0d0ef);
+  background: linear-gradient(to top left, #7e8dd8, #a0d0ef);
   border-radius: 25px;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px 10px;
   user-select: none;
@@ -38,6 +40,7 @@
   box-shadow: rgba(17, 17, 26, 0.061) 0px 8px 24px,
     rgba(17, 17, 26, 0.189) 0px 16px 56px, rgba(17, 17, 26, 0.172) 0px 24px 80px;
 }
+
 .filterWindow header {
   order: 1;
   display: flex;
