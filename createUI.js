@@ -49,6 +49,25 @@ class CreateButton {
         $navbarElement.appendChild($buttonEntry);
     }
 }
+class CreateFilterWindow {
+    constructor(filterWindowTitle) {
+        this.filterWindowTitle = filterWindowTitle;
+    }
+    generateWindowElement() {
+        const htmlTemplate = `
+    <div class="filterWindow">
+      <header>
+        <span>${this.filterWindowTitle}</span>
+          <button><img src="/icons/x.svg" /></button>
+      </header>
+      <div class="filterWindowBody"></div>
+      <footer></footer>
+    </div>`;
+        return ($filterWindow = document
+            .createRange()
+            .createContextualFragment(htmlTemplate));
+    }
+}
 class StartPage {
     loadButtons() {
         const buttonList = [

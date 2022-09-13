@@ -20,9 +20,7 @@
   display: flex;
   flex-direction: column;
   height: 97vh;
-  background: -webkit-linear-gradient(bottom right, #7e8dd8, #a0d0ef);
-  background: -moz-linear-gradient(bottom right, #7e8dd8, #a0d0ef);
-  background: linear-gradient(to top left, #7e8dd8, #a0d0ef);
+  background: var(--white);
   border-radius: 25px;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 25px 30px 10px;
   user-select: none;
@@ -85,7 +83,7 @@
   color: var(--bluishblack);
 }
 
-.filterWindowContent {
+.filterWindowBody {
   order: 3;
   z-index: -1;
   background-color: var(--white);
