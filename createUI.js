@@ -37,7 +37,7 @@ class CreateButton {
         const $buttonEntry = document.createElement('button-entry');
         const $navbarElement = document.querySelector(`.${this.position}`);
         if ($navbarElement === null) {
-            throw new Error('Location Element is null, what?');
+            throw new Error('navbarElement is null, what?');
         }
         /*
         if (this.action !== undefined) {
@@ -63,9 +63,46 @@ class CreateFilterWindow {
       <div class="filterWindowBody"></div>
       <footer></footer>
     </div>`;
-        return ($filterWindow = document
-            .createRange()
-            .createContextualFragment(htmlTemplate));
+        return document.createRange().createContextualFragment(htmlTemplate);
+    }
+    appendElementToFilterWindow(element) {
+        const $filterWindowBody = document.querySelector('.filterWindowBody');
+        $filterWindowBody.appendChild(element);
+    }
+    moveWindowEvent() {
+        const $filterWindow = document.querySelector('.filterWindow');
+        if ($filterWindow != null) {
+            $filterWindow.addEventListener('mousedown', () => {
+                $filterWindow.classList.add('filterWindowMovePointer');
+                document.addEventListener('mousemove', moveWindow);
+            });
+        }
+        else
+            throw new Error('$window is null and not an element');
+        document.addEventListener('mouseup', () => {
+            $filterWindow.classList.remove('filterWindowMovePointer');
+            document.removeEventListener('mousemove', moveWindow);
+        });
+        function moveWindow({ movementX, movementY }) {
+            let { left, top } = window.getComputedStyle($filterWindow);
+            $filterWindow.style.left = `${parseInt(left) + movementX}px`;
+            $filterWindow.style.top = `${parseInt(top) + movementY}px`;
+        }
+    }
+    saveHTML() {
+        var _a;
+        const $windowElement = this.generateWindowElement();
+        (_a = document.querySelector('.body')) === null || _a === void 0 ? void 0 : _a.appendChild($windowElement);
+    }
+}
+class CreateInputRange {
+    constructor(min, max) {
+        this.inputRange = document.createElement('input');
+        this.inputRange.setAttribute('type', 'range');
+        this.inputRange.setAttribute('class', 'inputRange');
+        this.inputRange.setAttribute('min', min);
+        this.inputRange.setAttribute('max', max);
+        this.inputRange.setAttribute('value', '50');
     }
 }
 class StartPage {
@@ -90,7 +127,12 @@ class StartPage {
                 name: 'Contrast',
                 icon: 'contrast.svg',
                 position: 'leftNavbar',
-                action: undefined
+                action: () => {
+                    const $contrastFilterWindow = new CreateFilterWindow('Contrast');
+                    $contrastFilterWindow.appendElementToFilterWindow;
+                    $contrastFilterWindow.generateWindowElement();
+                    $contrastFilterWindow.saveHTML();
+                }
             },
             {
                 name: 'Sharpness',
@@ -158,283 +200,19 @@ class StartPage {
         });
     }
 }
-const $window = document.getElementById('window');
-function onDrag({ movementX, movementY }) {
-    let { left, top } = window.getComputedStyle($window);
-    left = parseInt(left);
-    top = parseInt(top);
-    $window.style.top = (top + movementY).toString() + 'px';
-    $window.style.left = (left + movementX).toString() + 'px';
-}
-/* if ($window != null) { */
-$window.addEventListener('mousedown', () => {
-    $window.classList.add('filterWindowMovePointer');
-    document.addEventListener('mousemove', onDrag);
-});
-/* } else throw new Error('$window is null and not an element'); */
 // Carregar modulos
 (function () {
     const { loadButtons, eventClick } = new StartPage();
     loadButtons();
     eventClick();
 })();
-document.addEventListener('mouseup', () => {
-    $window.classList.remove('filterWindowMovePointer');
-    document.removeEventListener('mousemove', onDrag);
-});
-// class SlidableFilterInterface
-/* class Start {
-  loadingButtons(): void {
-    const buttonList: buttonListType = [
-      {
-        name: 'Brightness',
-        icon: 'brightness.svg',
-        pos: 'leftNavbar',
-        action: () => {
-          const inputRange = document.createElement('input');
-          inputRange.setAttribute('type', 'range');
-          inputRange.setAttribute('class', 'range');
-          inputRange.setAttribute('min', '0.0');
-          inputRange.setAttribute('max', '8');
-          inputRange.setAttribute('value', '0');
-          inputRange.setAttribute('step', '0.1');
-
-          return inputRange;
-        }
-      },
-      {
-        name: 'Contrast',
-        icon: 'contrast.svg',
-        pos: 'leftNavbar',
-        action: undefined
-      },
-      {
-        name: 'Sharpness',
-        icon: 'sharpness.svg',
-        pos: 'leftNavbar',
-        action: undefined
-      },
-      {
-        name: 'Temperature',
-        icon: 'temperature.svg',
-        pos: 'rightNavbar',
-        action: undefined
-      },
-      {
-        name: 'Color',
-        icon: 'color.svg',
-        pos: 'rightNavbar',
-        action: undefined
-      },
-      {
-        name: 'Information',
-        icon: 'information.svg',
-        pos: 'rightNavbar',
-        action: undefined
-      }
-    ];
-  }
-}
- */
-/* type posType = 'leftNavbar' | 'rightNavbar';
- type buttonListType = Array<{
-  name: string;
-  icon: string;
-  pos: posType;
-  action: () => void;
-}>;
-
-class CreateButton {
-  /**
-   *
-   * @param {*} name - Nome de exibição do botão.D
-   * @param {*} loc  - Localização do elemento na tela, ele vai adicionar uma class leftNavbar ou rightNavbar.
-  name: string;
-  pos: Element | null;
-  $icon: Element | null;
-  _action: unknown;
-  constructor(name: string, pos: posType) {
-    this.name = name;
-    this.pos = document.querySelector(`.${pos}`);
-    this.$icon = null;
-    this._action = undefined;
-  }
-
-  set buttonIcon(icon: string) {
-    const $elementImg = document.createElement('img');
-    $elementImg.setAttribute('class', 'buttonIcon');
-    $elementImg.setAttribute('src', `/icons/${icon}`);
-    this.$icon = $elementImg;
-  }
-
-  /**
-   * Setar HTML da ação do botão.
-   *
-   * @param {*} action - HTML
-
-  set buttonAction(action) {
-    this._action = action;
-  }
-
-  /**
-
-  get buttonAction(): unknown {
-    return this._action;
-  }
-
-  /**
-   *  Retornar o elemento da imagem gerada pela função buttonIcon.
-
-  get buttonIcon() {
-    return this.$icon;
-  }
-
-  /**
-   * Gerar o HTML do botão.
-
-  get HTML() {
-    if (this.name === undefined || this.loc === undefined) {
-      throw new Error('Invalid HTML');
-    }
-
-    const filterButton = document.createElement('button');
-    filterButton.setAttribute('type', 'button');
-    filterButton.setAttribute('class', 'filterButton purpleGradient');
-    filterButton.setAttribute('id', this.name);
-    filterButton.setAttribute('title', this.name);
-
-    // Adicionar Icone
-    if (this._buttonIcon !== undefined) {
-      filterButton.appendChild(this.buttonIcon);
-    }
-
-    return filterButton;
-  }
-
-  /**
-   * Salvar o HTML do botão no elemento da localização escolhida.
-
-  save() {
-    const buttonEntry = document.createElement('button-entry');
-
-    if (this.buttonAction !== undefined) {
-      const buttonAction = document.createElement('button-action');
-      buttonAction.appendChild(this.buttonAction);
-      buttonEntry.appendChild(buttonAction);
-    }
-
-    buttonEntry.appendChild(this.HTML);
-
-    this.loc.appendChild(buttonEntry);
-  }
-}
-
-/**
- *  Modulos da página
-
-class Start {
-  /**
-   *  Botões
-
-  loadingButtons() {
-    const buttonList: buttonListType = [
-      {
-        name: 'Brightness',
-        icon: 'brightness.svg',
-        pos: 'leftNavbar',
-        action: () => {
-          const inputRange = document.createElement('input');
-          inputRange.setAttribute('type', 'range');
-          inputRange.setAttribute('class', 'range');
-          inputRange.setAttribute('min', '0.0');
-          inputRange.setAttribute('max', '8');
-          inputRange.setAttribute('value', '0');
-          inputRange.setAttribute('step', '0.1');
-
-          return inputRange;
-        },
-      },
-      {
-        name: 'Contrast',
-        icon: 'contrast.svg',
-        pos: 'leftNavbar',
-        action: undefined,
-      },
-      {
-        name: 'Sharpness',
-        icon: 'sharpness.svg',
-        pos: 'leftNavbar',
-        action: undefined,
-      },
-      {
-        name: 'Temperature',
-        icon: 'temperature.svg',
-        pos: 'rightNavbar',
-        action: undefined,
-      },
-      {
-        name: 'Color',
-        icon: 'color.svg',
-        pos: 'rightNavbar',
-        action: undefined,
-      },
-      {
-        name: 'Information',
-        icon: 'information.svg',
-        pos: 'rightNavbar',
-        action: undefined,
-      },
-    ];
-
-    buttonList.forEach((buttonPropertiesObj) => {
-      const { name, icon, pos, action } = buttonPropertiesObj;
-      const $button = new CreateButton(name, pos);
-      $button.buttonIcon = icon;
-      if (action !== undefined) $button.buttonAction = action();
-      $button.save();
-    });
-  }
-
-  /**
-   *  Um Footer???
-
-  footer() {
-    const footer = document.createElement('figcaption');
-    footer.setAttribute('class', 'footer purpleBackgound');
-    document.body.appendChild(footer);
-  }
-
-  /**
-   * Evento do input[type=range]
-
-  eventRange() {
-    const range = document.querySelector('.range');
-    const style = document.createElement('style');
-    document.body.appendChild(style);
-
-    range.addEventListener('input', () => {
-      const value = range.value;
-      const valueBar = (100 * value) / range.max;
-      style.textContent = `.range {background: linear-gradient(to right, #1976d2 ${valueBar}%, #a8cbee ${valueBar}%);}`;
-      style.textContent += `.currentImage {filter: brightness(${Math.abs(
-        value > range.max / 1.5 ? value : value / 4
-      )});}`;
-    });
-  }
-}
-
-// Carregar modulos
-(function () {
-  const loadingPage = new Start();
-  loadingPage.loadingButtons();
-  loadingPage.footer();
-  loadingPage.eventRange();
-})();
-
-const obj = {
-  x: 0,
-  set addX(value) {
-    this.x = value + 1;
-  },
-};
-*/
+// eventRange() {
+//   const range = document.querySelector('.range');
+//   const style = document.createElement('style');
+//   document.body.appendChild(style);
+//   range.addEventListener('input', () => {
+//     const value = range.value;
+//     const valueBar = (100 * value) / range.max;
+//     style.textContent = `.range {background: linear-gradient(to right, #1976d2 ${valueBar}%, #a8cbee ${valueBar}%);}`;
+//     style.textContent += `.currentImage {filter: brightness(${Math.abs(
+//       value > range.max / 1.5 ? value : value / 4
