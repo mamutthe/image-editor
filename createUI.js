@@ -31,30 +31,27 @@ class CreateButton {
         if (this.$imgElement !== undefined) {
             $filterButton.appendChild(this.$imgElement);
         }
+        $filterButton.addEventListener('click', function () {
+            const $filterWindowElement = new CreateFilterWindow(this.name);
+            $filterWindowElement.generateWindowElementHTML();
+            $filterWindowElement.appendToBody();
+        });
         return $filterButton;
     }
-    create() {
-        const $buttonEntry = document.createElement('button-entry');
+    save() {
         const $navbarElement = document.querySelector(`.${this.position}`);
         if ($navbarElement === null) {
             throw new Error('navbarElement is null, what?');
         }
-        /*
-        if (this.action !== undefined) {
-          const $buttonAction = document.createElement('button-action');
-          $buttonAction.appendChild(this.action as Node);
-          $buttonEntry.appendChild($buttonAction);
-        } */
-        $buttonEntry.appendChild(this.HTML);
-        $navbarElement.appendChild($buttonEntry);
+        $navbarElement.appendChild(this.HTML);
     }
 }
 class CreateFilterWindow {
     constructor(filterWindowTitle) {
         this.filterWindowTitle = filterWindowTitle;
     }
-    generateWindowElement() {
-        const htmlTemplate = `
+    generateWindowElementHTML() {
+        const DocumentFragment = `
     <div class="filterWindow">
       <header>
         <span>${this.filterWindowTitle}</span>
@@ -63,46 +60,49 @@ class CreateFilterWindow {
       <div class="filterWindowBody"></div>
       <footer></footer>
     </div>`;
-        return document.createRange().createContextualFragment(htmlTemplate);
+        return document.createRange().createContextualFragment(DocumentFragment);
     }
-    appendElementToFilterWindow(element) {
+    appendToFilterWindow(element) {
         const $filterWindowBody = document.querySelector('.filterWindowBody');
         $filterWindowBody.appendChild(element);
     }
-    moveWindowEvent() {
+    appendToBody() {
+        const $windowElement = this.generateWindowElementHTML();
+        const $body = document.querySelector('body');
+        $body.appendChild($windowElement);
+    }
+    moveFilterWindowEvent() {
         const $filterWindow = document.querySelector('.filterWindow');
         if ($filterWindow != null) {
             $filterWindow.addEventListener('mousedown', () => {
                 $filterWindow.classList.add('filterWindowMovePointer');
-                document.addEventListener('mousemove', moveWindow);
+                document.addEventListener('mousemove', moveFilterWindow);
             });
         }
         else
             throw new Error('$window is null and not an element');
         document.addEventListener('mouseup', () => {
             $filterWindow.classList.remove('filterWindowMovePointer');
-            document.removeEventListener('mousemove', moveWindow);
+            document.removeEventListener('mousemove', moveFilterWindow);
         });
-        function moveWindow({ movementX, movementY }) {
-            let { left, top } = window.getComputedStyle($filterWindow);
+        function moveFilterWindow({ movementX, movementY }) {
+            const { left, top } = window.getComputedStyle($filterWindow);
             $filterWindow.style.left = `${parseInt(left) + movementX}px`;
             $filterWindow.style.top = `${parseInt(top) + movementY}px`;
         }
     }
-    saveHTML() {
-        var _a;
-        const $windowElement = this.generateWindowElement();
-        (_a = document.querySelector('.body')) === null || _a === void 0 ? void 0 : _a.appendChild($windowElement);
-    }
 }
 class CreateInputRange {
-    constructor(min, max) {
+    constructor(min, max, value) {
         this.inputRange = document.createElement('input');
         this.inputRange.setAttribute('type', 'range');
         this.inputRange.setAttribute('class', 'inputRange');
         this.inputRange.setAttribute('min', min);
         this.inputRange.setAttribute('max', max);
-        this.inputRange.setAttribute('value', '50');
+        this.inputRange.setAttribute('value', value);
+    }
+    get InputRange() {
+        return this.inputRange;
     }
 }
 class StartPage {
@@ -112,59 +112,54 @@ class StartPage {
                 name: 'Brightness',
                 icon: 'brightness.svg',
                 position: 'leftNavbar',
-                action: () => {
-                    const inputRange = document.createElement('input');
-                    inputRange.setAttribute('type', 'range');
-                    inputRange.setAttribute('class', 'range');
-                    inputRange.setAttribute('min', '0.0');
-                    inputRange.setAttribute('max', '8');
-                    inputRange.setAttribute('value', '0');
-                    inputRange.setAttribute('step', '0.1');
-                    return inputRange;
-                }
+                windowProperties: {
+                    element: 'InputRange',
+                    elementParameters: ['0', '100', '50']
+                },
+                action: undefined
             },
             {
                 name: 'Contrast',
                 icon: 'contrast.svg',
                 position: 'leftNavbar',
-                action: () => {
-                    const $contrastFilterWindow = new CreateFilterWindow('Contrast');
-                    $contrastFilterWindow.appendElementToFilterWindow;
-                    $contrastFilterWindow.generateWindowElement();
-                    $contrastFilterWindow.saveHTML();
-                }
+                windowProperties: {},
+                action: undefined
             },
             {
                 name: 'Sharpness',
                 icon: 'sharpness.svg',
                 position: 'leftNavbar',
+                windowProperties: {},
                 action: undefined
             },
             {
                 name: 'Temperature',
                 icon: 'temperature.svg',
                 position: 'rightNavbar',
+                windowProperties: {},
                 action: undefined
             },
             {
                 name: 'Color',
                 icon: 'color.svg',
                 position: 'rightNavbar',
+                windowProperties: {},
                 action: undefined
             },
             {
                 name: 'Information',
                 icon: 'information.svg',
                 position: 'rightNavbar',
+                windowProperties: {},
                 action: undefined
             }
         ];
         buttonList.forEach((buttonObj) => {
-            const { name, icon, position, action } = buttonObj;
-            const newButton = new CreateButton(name, position);
-            newButton.Icon = icon;
-            newButton.Action = action;
-            newButton.create();
+            const { name, icon, position, windowProperties, action } = buttonObj;
+            const $newFilterButton = new CreateButton(name, position);
+            $newFilterButton.Icon = icon;
+            $newFilterButton.Action = action;
+            $newFilterButton.save();
         });
     }
     eventClick() {
@@ -203,6 +198,7 @@ class StartPage {
 // Carregar modulos
 (function () {
     const { loadButtons, eventClick } = new StartPage();
+    const { moveFilterWindowEvent } = new CreateFilterWindow();
     loadButtons();
     eventClick();
 })();
