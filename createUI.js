@@ -31,12 +31,6 @@ class CreateButton {
         if (this.$imgElement !== undefined) {
             $filterButton.appendChild(this.$imgElement);
         }
-        $filterButton.addEventListener('click', function () {
-            const $filterWindowElement = new CreateFilterWindow();
-            console.log($filterWindowElement.$windowElement);
-            $filterWindowElement.appendToBody();
-            loadEvents();
-        });
         return $filterButton;
     }
     save() {
@@ -46,22 +40,32 @@ class CreateButton {
         }
         $navbarElement.appendChild(this.HTML);
     }
+    generateFilterWindowEvent() {
+        const filterWindowTitle = this.name;
+        console.log(filterWindowTitle);
+        const $filterButton = document.getElementById(filterWindowTitle);
+        $filterButton === null || $filterButton === void 0 ? void 0 : $filterButton.addEventListener('click', () => {
+            const $filterWindow = new CreateFilterWindow(filterWindowTitle);
+            $filterWindow.generateWindowElementHTML();
+            $filterWindow.appendToBody();
+        });
+    }
 }
 class CreateFilterWindow {
-    constructor() {
-        this.$windowElement = this.generateWindowElementHTML();
+    constructor(title) {
+        this.title = title;
     }
     generateWindowElementHTML() {
-        const DocumentFragment = `
+        const documentFragment = `
     <div class="filterWindow">
       <header>
-        <span></span>
-          <button onClick='closeEvent()'><img src="/icons/x.svg" /></button>
+        <span>${this.title}</span>
+          <button><img src="/icons/x.svg"/></button>
       </header>
       <div class="filterWindowBody"></div>
       <footer></footer>
     </div>`;
-        return document.createRange().createContextualFragment(DocumentFragment);
+        return document.createRange().createContextualFragment(documentFragment);
     }
     appendToFilterWindow(element) {
         const $filterWindowBody = document.querySelector('.filterWindowBody');
@@ -69,7 +73,7 @@ class CreateFilterWindow {
     }
     appendToBody() {
         const $body = document.querySelector('body');
-        $body.appendChild(this.$windowElement);
+        $body.appendChild(this.generateWindowElementHTML());
     }
 }
 class CreateInputRange {
@@ -140,6 +144,7 @@ class StartPage {
             $newFilterButton.Icon = icon;
             $newFilterButton.Action = action;
             $newFilterButton.save();
+            $newFilterButton.generateFilterWindowEvent();
         });
     }
 }
@@ -148,26 +153,33 @@ class StartPage {
     const { loadButtons } = new StartPage();
     loadButtons();
 })();
-function loadEvents() {
-    const $filterWindow = document.querySelectorAll('.filterWindow');
-    if ($filterWindow != null) {
-        $filterWindow.addEventListener('mousedown', () => {
-            $filterWindow.classList.add('filterWindowMovePointer');
-            document.addEventListener('mousemove', moveFilterWindow);
-        });
-    }
-    else
-        throw new Error('$window is null and not an element');
-    document.addEventListener('mouseup', () => {
-        $filterWindow.classList.remove('filterWindowMovePointer');
-        document.removeEventListener('mousemove', moveFilterWindow);
+/* function loadEvents(): void {
+  const $filterWindow = document.querySelectorAll('.filterWindow') as NodeList;
+  if ($filterWindow != null) {
+    $filterWindow.addEventListener('mousedown', () => {
+      $filterWindow.classList.add('filterWindowMovePointer');
+      document.addEventListener('mousemove', moveFilterWindow);
     });
-    function moveFilterWindow({ movementX, movementY }) {
-        const { left, top } = window.getComputedStyle($filterWindow);
-        $filterWindow.style.left = `${parseInt(left) + movementX}px`;
-        $filterWindow.style.top = `${parseInt(top) + movementY}px`;
-    }
-}
+  } else throw new Error('$window is null and not an element');
+
+  document.addEventListener('mouseup', () => {
+    $filterWindow.classList.remove('filterWindowMovePointer');
+    document.removeEventListener('mousemove', moveFilterWindow);
+  });
+
+  function moveFilterWindow({
+    movementX,
+    movementY
+  }: {
+    movementX: number;
+    movementY: number;
+  }): void {
+    const { left, top }: { left: string; top: string } =
+      window.getComputedStyle($filterWindow);
+    $filterWindow.style.left = `${parseInt(left) + movementX}px`;
+    $filterWindow.style.top = `${parseInt(top) + movementY}px`;
+  }
+} */
 // eventRange() {
 //   const range = document.querySelector('.range');
 //   const style = document.createElement('style');

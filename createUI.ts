@@ -51,13 +51,6 @@ class CreateButton {
       $filterButton.appendChild(this.$imgElement);
     }
 
-    $filterButton.addEventListener('click', function () {
-      const $filterWindowElement = new CreateFilterWindow();
-      console.log($filterWindowElement.$windowElement);
-      $filterWindowElement.appendToBody();
-      loadEvents();
-    });
-
     return $filterButton;
   }
 
@@ -70,24 +63,38 @@ class CreateButton {
 
     $navbarElement.appendChild(this.HTML);
   }
+
+  generateFilterWindowEvent(): void {
+    const filterWindowTitle = this.name;
+    console.log(filterWindowTitle);
+    const $filterButton = document.getElementById(filterWindowTitle);
+    $filterButton?.addEventListener('click', () => {
+      const $filterWindow = new CreateFilterWindow(filterWindowTitle);
+      $filterWindow.generateWindowElementHTML();
+      $filterWindow.appendToBody();
+    });
+  }
 }
 
 class CreateFilterWindow {
+  title: string;
+  constructor(title: string) {
+    this.title = title;
+  }
+
   generateWindowElementHTML(): DocumentFragment {
-    const DocumentFragment = `
+    const documentFragment = `
     <div class="filterWindow">
       <header>
-        <span></span>
-          <button onClick='closeEvent()'><img src="/icons/x.svg" /></button>
+        <span>${this.title}</span>
+          <button><img src="/icons/x.svg"/></button>
       </header>
       <div class="filterWindowBody"></div>
       <footer></footer>
     </div>`;
 
-    return document.createRange().createContextualFragment(DocumentFragment);
+    return document.createRange().createContextualFragment(documentFragment);
   }
-
-  $windowElement = this.generateWindowElementHTML();
 
   appendToFilterWindow(element: HTMLElement): void {
     const $filterWindowBody = document.querySelector(
@@ -98,7 +105,7 @@ class CreateFilterWindow {
 
   appendToBody(): void {
     const $body = document.querySelector('body') as HTMLElement;
-    $body.appendChild(this.$windowElement);
+    $body.appendChild(this.generateWindowElementHTML());
   }
 }
 
@@ -173,6 +180,7 @@ class StartPage {
       $newFilterButton.Icon = icon;
       $newFilterButton.Action = action;
       $newFilterButton.save();
+      $newFilterButton.generateFilterWindowEvent();
     });
   }
 }
@@ -183,7 +191,7 @@ class StartPage {
   loadButtons();
 })();
 
-function loadEvents(): void {
+/* function loadEvents(): void {
   const $filterWindow = document.querySelectorAll('.filterWindow') as NodeList;
   if ($filterWindow != null) {
     $filterWindow.addEventListener('mousedown', () => {
@@ -209,7 +217,7 @@ function loadEvents(): void {
     $filterWindow.style.left = `${parseInt(left) + movementX}px`;
     $filterWindow.style.top = `${parseInt(top) + movementY}px`;
   }
-}
+} */
 // eventRange() {
 //   const range = document.querySelector('.range');
 //   const style = document.createElement('style');

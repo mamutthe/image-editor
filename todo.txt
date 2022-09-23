@@ -1,0 +1,4 @@
+- add close filter window feature
+- fix filter button spaming multiple windows
+- fix append to filter window
+- add custumizeble inputs class call??
