@@ -45,7 +45,6 @@ class CreateButton {
     $filterButton.setAttribute('type', 'button');
     $filterButton.setAttribute('class', 'filterButton');
     $filterButton.setAttribute('id', this.name);
-    $filterButton.setAttribute('title', this.name);
 
     if (this.$imgElement !== undefined) {
       $filterButton.appendChild(this.$imgElement);
@@ -63,49 +62,42 @@ class CreateButton {
 
     $navbarElement.appendChild(this.HTML);
   }
-
-  generateFilterWindowEvent(): void {
-    const filterWindowTitle = this.name;
-    console.log(filterWindowTitle);
-    const $filterButton = document.getElementById(filterWindowTitle);
-    $filterButton?.addEventListener('click', () => {
-      const $filterWindow = new CreateFilterWindow(filterWindowTitle);
-      $filterWindow.generateWindowElementHTML();
-      $filterWindow.appendToBody();
-    });
-  }
 }
 
 class CreateFilterWindow {
-  title: string;
-  constructor(title: string) {
-    this.title = title;
+  windowTitle: string;
+
+  constructor(windowTitle: string) {
+    this.windowTitle = windowTitle;
   }
 
-  generateWindowElementHTML(): DocumentFragment {
+  get filterWindowElement(): DocumentFragment {
     const documentFragment = `
-    <div class="filterWindow">
-      <header>
-        <span>${this.title}</span>
-          <button><img src="/icons/x.svg"/></button>
-      </header>
-      <div class="filterWindowBody"></div>
-      <footer></footer>
-    </div>`;
+      <div class="filterWindow" id="${this.windowTitle}FilterWindow">
+        <header>
+          <span>${this.windowTitle}</span>
+            <button><img src="/icons/x.svg"/></button>
+        </header>
+        <div class="filterWindowBody"></div>
+        <footer></footer>
+      </div>`;
 
     return document.createRange().createContextualFragment(documentFragment);
   }
 
-  appendToFilterWindow(element: HTMLElement): void {
-    const $filterWindowBody = document.querySelector(
-      '.filterWindowBody'
-    ) as HTMLElement;
-    $filterWindowBody.appendChild(element);
+  save(): void {
+    const $body = document.querySelector('body') as HTMLElement;
+    $body.appendChild(this.filterWindowElement);
   }
 
-  appendToBody(): void {
-    const $body = document.querySelector('body') as HTMLElement;
-    $body.appendChild(this.generateWindowElementHTML());
+  closeEvent(): void {
+    const $closeButton = document
+      .getElementById(`${this.windowTitle}FilterWindow`)
+      ?.querySelector('button');
+
+    $closeButton?.addEventListener('click', (event) => {
+      event.target?.parentElement.parentElement.remove();
+    });
   }
 }
 
@@ -122,6 +114,28 @@ class CreateInputRange {
 
   get InputRange(): HTMLInputElement {
     return this.inputRange;
+  }
+}
+
+class PageEvents {
+  generateFilterWindow(): void {
+    const buttonList = document.querySelectorAll('.filterButton');
+
+    buttonList.forEach(($filterButton) => {
+      $filterButton.addEventListener('click', () => {
+        if (
+          document.querySelector(`#${$filterButton.id}FilterWindow`) === null
+        ) {
+          const filterWindow = new CreateFilterWindow($filterButton.id);
+          filterWindow.save();
+          filterWindow.closeEvent();
+        }
+      });
+    });
+  }
+
+  moveFilterWindow(): void {
+    const $filterWindows = document.querySelectorAll('.filterWindow');
   }
 }
 
@@ -180,15 +194,20 @@ class StartPage {
       $newFilterButton.Icon = icon;
       $newFilterButton.Action = action;
       $newFilterButton.save();
-      $newFilterButton.generateFilterWindowEvent();
     });
+  }
+
+  loadEvents(): void {
+    const pageEvents = new PageEvents();
+    pageEvents.generateFilterWindow();
   }
 }
 
 // Carregar modulos
 (function () {
-  const { loadButtons } = new StartPage();
+  const { loadButtons, loadEvents } = new StartPage();
   loadButtons();
+  loadEvents();
 })();
 
 /* function loadEvents(): void {

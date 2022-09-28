@@ -27,7 +27,6 @@ class CreateButton {
         $filterButton.setAttribute('type', 'button');
         $filterButton.setAttribute('class', 'filterButton');
         $filterButton.setAttribute('id', this.name);
-        $filterButton.setAttribute('title', this.name);
         if (this.$imgElement !== undefined) {
             $filterButton.appendChild(this.$imgElement);
         }
@@ -40,40 +39,35 @@ class CreateButton {
         }
         $navbarElement.appendChild(this.HTML);
     }
-    generateFilterWindowEvent() {
-        const filterWindowTitle = this.name;
-        console.log(filterWindowTitle);
-        const $filterButton = document.getElementById(filterWindowTitle);
-        $filterButton === null || $filterButton === void 0 ? void 0 : $filterButton.addEventListener('click', () => {
-            const $filterWindow = new CreateFilterWindow(filterWindowTitle);
-            $filterWindow.generateWindowElementHTML();
-            $filterWindow.appendToBody();
-        });
-    }
 }
 class CreateFilterWindow {
-    constructor(title) {
-        this.title = title;
+    constructor(windowTitle) {
+        this.windowTitle = windowTitle;
     }
-    generateWindowElementHTML() {
+    get filterWindowElement() {
         const documentFragment = `
-    <div class="filterWindow">
-      <header>
-        <span>${this.title}</span>
-          <button><img src="/icons/x.svg"/></button>
-      </header>
-      <div class="filterWindowBody"></div>
-      <footer></footer>
-    </div>`;
+      <div class="filterWindow" id="${this.windowTitle}FilterWindow">
+        <header>
+          <span>${this.windowTitle}</span>
+            <button><img src="/icons/x.svg"/></button>
+        </header>
+        <div class="filterWindowBody"></div>
+        <footer></footer>
+      </div>`;
         return document.createRange().createContextualFragment(documentFragment);
     }
-    appendToFilterWindow(element) {
-        const $filterWindowBody = document.querySelector('.filterWindowBody');
-        $filterWindowBody.appendChild(element);
-    }
-    appendToBody() {
+    save() {
         const $body = document.querySelector('body');
-        $body.appendChild(this.generateWindowElementHTML());
+        $body.appendChild(this.filterWindowElement);
+    }
+    closeEvent() {
+        var _a;
+        const $closeButton = (_a = document
+            .getElementById(`${this.windowTitle}FilterWindow`)) === null || _a === void 0 ? void 0 : _a.querySelector('button');
+        $closeButton === null || $closeButton === void 0 ? void 0 : $closeButton.addEventListener('click', (event) => {
+            var _a;
+            (_a = event.target) === null || _a === void 0 ? void 0 : _a.parentElement.parentElement.remove();
+        });
     }
 }
 class CreateInputRange {
@@ -87,6 +81,23 @@ class CreateInputRange {
     }
     get InputRange() {
         return this.inputRange;
+    }
+}
+class PageEvents {
+    generateFilterWindow() {
+        const buttonList = document.querySelectorAll('.filterButton');
+        buttonList.forEach(($filterButton) => {
+            $filterButton.addEventListener('click', () => {
+                if (document.querySelector(`#${$filterButton.id}FilterWindow`) === null) {
+                    const filterWindow = new CreateFilterWindow($filterButton.id);
+                    filterWindow.save();
+                    filterWindow.closeEvent();
+                }
+            });
+        });
+    }
+    moveFilterWindow() {
+        const $filterWindows = document.querySelectorAll('.filterWindow');
     }
 }
 class StartPage {
@@ -144,14 +155,18 @@ class StartPage {
             $newFilterButton.Icon = icon;
             $newFilterButton.Action = action;
             $newFilterButton.save();
-            $newFilterButton.generateFilterWindowEvent();
         });
+    }
+    loadEvents() {
+        const pageEvents = new PageEvents();
+        pageEvents.generateFilterWindow();
     }
 }
 // Carregar modulos
 (function () {
-    const { loadButtons } = new StartPage();
+    const { loadButtons, loadEvents } = new StartPage();
     loadButtons();
+    loadEvents();
 })();
 /* function loadEvents(): void {
   const $filterWindow = document.querySelectorAll('.filterWindow') as NodeList;

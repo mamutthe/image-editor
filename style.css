@@ -70,6 +70,7 @@
   height: 7.1px;
   filter: invert(0%) sepia(0%) saturate(5071%) hue-rotate(141deg)
     brightness(99%) contrast(83%);
+  pointer-events: none;
 }
 
 .filterWindow:hover header button:hover {
@@ -151,7 +152,7 @@
   display: block;
   height: 72vh;
   max-width: 120vh;
- /*  object-fit: cover; */
+  /*  object-fit: cover; */
 }
 
 .leftNavbar {
